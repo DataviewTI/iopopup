@@ -1,0 +1,26 @@
+{
+    "name": "dataview/iopopup",
+    "description": "Controle de Popup's da intranetone",
+    "authors": [
+        {
+            "name": "mdisconzi",
+            "email": "mdisconzi@bitbucket.org"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+        "Dataview\\IOPopup\\": "src/"
+        }
+      },
+    "require": {
+      "dataview/intranetone": "*",
+      "intervention/image": "^2.4"
+    },
+    "extra": {
+      "laravel": {
+          "providers": [
+              "\\Dataview\\IOPopup\\IOPopupServiceProvider"
+          ]
+      }
+  }
+}

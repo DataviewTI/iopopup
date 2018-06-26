@@ -1,0 +1,51 @@
+{
+<<<<<<< HEAD
+  "description": "Image Gallery assets package for IntranetOne",
+  "license": "MIT",
+  "main": "wploader.js",
+  "name": "intranetone-gallery",
+=======
+  "description": "Popup's assets package for IntranetOne",
+  "license": "MIT",
+  "main": "wploader.js",
+  "name": "intranetone-popup",
+>>>>>>> fe/popup added
+  "version": "0.0.1",
+  "maintainers": [
+    {
+      "name": "Marcelo Disconzi",
+      "email": "mdisconzi@gmail.com"
+    },
+    {
+      "name": "Thiago Brauer",
+      "email": "thiagobrauer@gmail.com"
+    }
+  ],
+  "keywords": [
+    "Laravel",
+    "IntranetOne",
+    "Intranet CMS",
+    "Dataview",
+<<<<<<< HEAD
+    "Image Gallery"
+=======
+    "Popup Manager"
+>>>>>>> fe/popup added
+  ],
+  "IODependencies": {
+    "sortablejs": "^1.6.0",
+    "dropzone": "^5.1.1",
+    "cropperjs": "^1.3.6",
+<<<<<<< HEAD
+    "jquery-cropper": "^1.0.0"
+=======
+    "jquery-cropper": "^1.0.0",
+    "moment": "^2.21.0",
+    "moment-duration-format": "^2.2.2",
+    "dv-wickedpicker": "^0.0.1"
+>>>>>>> fe/popup added
+  },
+  "ignore": [
+    "node_modules"
+  ]
+}

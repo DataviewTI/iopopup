@@ -1,0 +1,41 @@
+small[data-fv-for="has_images"]{
+  position:absolute;
+  left:0;
+  top:0;
+}
+
+i[data-fv-icon-for='has_images']{
+  position:absolute;
+  right:3px;
+  top:0;
+}
+
+.__sortable-list{
+  height:350px;
+}
+
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      ███████╗    ██╗    ███████╗    ███████╗    ███████╗
+      ██╔════╝    ██║    ╚══███╔╝    ██╔════╝    ██╔════╝
+      ███████╗    ██║      ███╔╝     █████╗      ███████╗
+      ╚════██║    ██║     ███╔╝      ██╔══╝      ╚════██║
+      ███████║    ██║    ███████╗    ███████╗    ███████║
+      ╚══════╝    ╚═╝    ╚══════╝    ╚══════╝    ╚══════╝
+                                                        
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+.__dimensions tr td{
+  padding-bottom:3px;
+}
+
+.__dimensions tr th{
+  font-weight:500;
+}
+
+.checkbox-decorator{
+  padding:0!important;
+}
+
+.checkbox .checkbox-decorator{
+  position:relative;
+  margin:auto!important;
+}
