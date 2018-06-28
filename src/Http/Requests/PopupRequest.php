@@ -13,6 +13,7 @@ class PopupRequest extends IORequest
     //$input['open_delay'] =  empty($input['open_delay']) ? 0 : $input['open_delay'];
     //$input['close_delay'] =  empty($input['close_delay']) ? 0 : $input['close_delay'];
     $input['sizes'] = $input['__dz_copy_params'];
+    $input['close_on_esc'] = (int)($input['__close_on_esc']=='true');
 
     if(isset($input['video_start_at']))
       $input['start_at'] = str_replace(' ','',date($input['video_start_at']));

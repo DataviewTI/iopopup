@@ -22,12 +22,14 @@ class Popup extends IOModel
     parent::boot(); 
 
     static::created(function (Popup $obj) {
-      $group = new Group([
-        'group' => "Album do Popup ".$obj->id,
-        'sizes' => $obj->getAppend("sizes")
-      ]);
-      $group->save();
-      $obj->group()->associate($group)->save();
+      if($obj->getAppend("has_images")){
+        $group = new Group([
+          'group' => "Album do Popup ".$obj->id,
+          'sizes' => $obj->getAppend("sizes")
+        ]);
+        $group->save();
+        $obj->group()->associate($group)->save();
+      }
     });
     
   }

@@ -5,6 +5,13 @@ new IOService({
 
     $('[data-toggle="popover"]').popover();
 
+    $('#close_on_esc').attrchange(function(attrName) {
+      if(attrName == 'aria-pressed'){
+        console.log($(this).attr('aria-pressed'));
+        //$('#__close_on_esc').val($(this).attr('aria-pressed'));
+      }
+    });
+
     Sortable.create(document.getElementById('custom-dropzone'),{
       animation: 250,
       handle: ".dz-reorder",
@@ -811,7 +818,7 @@ function preview(param){
 function view(self){
   return{
       onSuccess:function(data){
-
+        console.log(data);
         $("[name='name']").val(data.name);
         $("[name='url']").val(data.url);
         $("[name='date_start']").pickadate('picker').set('select',new Date(data.date_start));
@@ -822,7 +829,9 @@ function view(self){
         $("[name='width']").val(data.width);
         $("[name='height']").val(data.height);
 
-          //reload imagens 
+        $("#close_on_esc").aaToggle(!data.close_on_esc==0);
+
+        //reload imagens 
           self.dz.removeAllFiles(true);
 
           if(data.group!=null){

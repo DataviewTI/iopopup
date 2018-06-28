@@ -17,6 +17,7 @@ class CreatePopupsTable extends Migration
         $table->dateTime('date_end')->nullable();
         $table->smallInteger('open_delay')->unsigned()->nullable();
         $table->smallInteger('close_delay')->unsigned()->nullable();
+        $table->boolean('close_on_esc')->default(false);
         $table->smallInteger('width')->unsigned()->nullable();
         $table->smallInteger('height')->unsigned()->nullable();
         $table->integer('group_id')->unsigned()->nullable();

@@ -1,71 +1,17 @@
-.__pp{
-  border:1px blue solid;
+.modal-backdrop{
+    opacity:0.8 !important;
 }
 .__pp button.close{
-  border:1px blue solid;
   position:absolute;
-  top:15px;
-  right:15px;
+  color:#fff;
+  opacity:.8;
+  top:20px;
+  right:20px;
+}
+.__pp button.close:hover{
+  opacity:1;
 }
 .__pp .modal-content{
   background-color:rgba(255,255,255,0);
   border:none;
 }
-
-
-
-
-
-/*.__pp-backdrop{
-  display: flex;
-  position: fixed;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
-  flex-direction: row;
-  align-items: center;
-  justify-content: center;
-  padding: 10px;
-  background-color: rgba(0,0,0,.4);
-  z-index: 1060;
-  overflow-x: hidden;
-  -webkit-overflow-scrolling: touch;
-}
-.__pp-backdrop:before{
-  content:'';
-  display: flex;
-  position: fixed;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
-  flex-direction: row;
-  align-items: center;
-  justify-content: center;
-  background-color: rgba(0,0,244,.4);
-  overflow-x: hidden;
-  -webkit-overflow-scrolling: touch;
-}
-
-
-.__pp-content{
-  display:flex;
-  margin:auto;
-  z-index: 1061;
-  background-color:rgba(0,0,0,.5);
-  position:relative;
-  box-shadow:2px 2px 6px rgba(0,0,0,.7);
-}
-.__pp-content img{
-  
-}
-
-.__pp-close{
-  color:#fff;
-  cursor:pointer;
-  position:absolute;
-  right:0;
-  top:-20px;
-}
-*/

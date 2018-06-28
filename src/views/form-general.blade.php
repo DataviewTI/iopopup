@@ -62,6 +62,19 @@
           class = 'form-control form-control-lg' maxlength="4" min='1' max = '2000' onkeypress='return event.charCode >= 48 && event.charCode <= 57' />
         </div>
       </div>
+      <div class="col-5 col-xs-12">
+        <div class="form-group h-100">
+          <div class = 'd-flex mt-4 pt-3'>
+          <label for = 'close_on_esc' class = 'bmd-label-static float-left'>Fechar com ESC?</label>
+            <button type="button" class="float-left btn btn-lg aanjulena-btn-toggle btn-sm"
+            data-toggle="button" aria-pressed="false" data-default-state='true'
+            autocomplete="off" name = 'close_on_esc' id = 'close_on_esc'>
+              <div class="handle"></div>
+            </button>
+            <input type = 'hidden' name = '__close_on_esc' id = '__close_on_esc' value='true'/>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
   <div class="col-sm-6 col-xs-12">

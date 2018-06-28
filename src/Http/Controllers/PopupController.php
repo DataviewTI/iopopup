@@ -25,7 +25,7 @@ class PopupController extends IOController{
 	}
 	
 	public function list(){
-    $query = Popup::select('id','name','url','date_start','date_end','group_id','video_id','open_delay','close_delay')
+    $query = Popup::select('id','name','url','date_start','date_end','group_id','video_id','close_on_esc','open_delay','close_delay')
     ->with([
       'group'=>function($query){
         $query->select('groups.id','sizes');
@@ -45,10 +45,11 @@ class PopupController extends IOController{
       return response()->json(['errors' => $check['errors'] ], $check['code']);	
       
     $obj = new Popup($request->all());
-    if($request->__dz_copy_params!= null)
-      $obj->setAppend("sizes",$request->__dz_copy_params);
-    $obj->save();
-
+    if($request->sizes!= null){
+      $obj->setAppend("sizes",$request->sizes);
+      $obj->setAppend("has_images",$request->has_images);
+      $obj->save();
+    }
       if($request->video_url != null){
         $_vdata = json_decode($request->video_data);
         
@@ -65,9 +66,10 @@ class PopupController extends IOController{
         $obj->save();
       }
 
-    if($request->__dz_copy_params!= null)
-      $obj->group->manageImages(json_decode($request->__dz_images),json_decode($request->__dz_copy_params));
-    $obj->save();
+    if($request->sizes!= null && $request->has_images>0){
+      $obj->group->manageImages(json_decode($request->__dz_images),json_decode($request->sizes));
+      $obj->save();
+    }
 
     return response()->json(['success'=>true,'data'=>null]);
 	}
@@ -77,7 +79,7 @@ class PopupController extends IOController{
     if(!$check['status'])
       return response()->json(['errors' => $check['errors'] ], $check['code']);	
 
-    $query = Popup::select('id','name','url','width','height','date_start','date_end','open_delay','close_delay','group_id','video_id')
+    $query = Popup::select('id','name','url','width','height','date_start','date_end','open_delay','close_delay','group_id','video_id','close_on_esc')
       ->with([
           'video','group'=>function($query){
           $query->select('groups.id','sizes')
@@ -99,7 +101,7 @@ class PopupController extends IOController{
       $_new = (object) $request->all();
 			$_old = Popup::find($id);
 			
-      $upd = ['name','url','date_start','date_end','open_delay','close_delay','width','height'];
+      $upd = ['name','url','date_start','date_end','open_delay','close_delay','close_on_esc','width','height'];
 
       foreach($upd as $u)
         $_old->{$u} = $_new->{$u};
@@ -107,17 +109,17 @@ class PopupController extends IOController{
       
       if($_old->group != null){
         $_old->group->sizes = $_new->sizes;
-        $_old->group->manageImages(json_decode($_new->__dz_images),json_decode($_new->__dz_copy_params));
+        $_old->group->manageImages(json_decode($_new->__dz_images),json_decode($_new->sizes));
         $_old->group->save();
       }
       else
 				if(count(json_decode($_new->__dz_images))>0){
 					$_old->group()->associate(Group::create([
-            'group' => "Album do Popup".$obj->id,
-            'sizes' => $_new->__dz_copy_params
+            'group' => "Album do Popup".$id,
+            'sizes' => $_new->sizes
             ])
           );
-					$_old->group->manageImages(json_decode($_new->__dz_images),json_decode($_new->__dz_copy_params));
+					$_old->group->manageImages(json_decode($_new->__dz_images),json_decode($_new->sizes));
 				}
 		
         if($_old->video != null){
