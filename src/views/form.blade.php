@@ -3,7 +3,7 @@
     "_id" => "default-wizard",
     "_min_height"=>"435px",
     "_steps"=> [
-        ["name" => "Teste", "view"=> "Popup::form-general"],
+        ["name" => "Dados Gerais", "view"=> "Popup::form-general"],
         ["name" => "Video","view"=> "IntranetOne::io.forms.form-video"],
       ]
   ])
