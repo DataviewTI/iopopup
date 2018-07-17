@@ -225,19 +225,6 @@ new IOService({
               }
             }
           },
-          // has_images:{
-          //   enabled:false,
-          //   validators:{
-          //     callback:{
-          //       message: 'Carregue a imagem do popup',
-          //       callback: function(value, validator, $field){
-          //         if(self.dz.files.length>0)
-          //           return true
-          //         return false;
-          //       }
-          //     }
-          //   }
-          // },
           width:{
             enabled:true,
             validators:{
@@ -483,7 +470,7 @@ new IOService({
          }
       },
       removedFile:function(file){
-        self.fv[0].updateFieldStatus('has_images', 'NotValidated');
+        // self.fv[0].updateFieldStatus('has_images', 'NotValidated');
       },
       onSuccess:function(file,ret){
         self.fv[1].revalidateField('imageorvideo');
