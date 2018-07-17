@@ -33,7 +33,7 @@ new IOService({
       clearable: false,
       beforeShow:function(e,t){
        $(t).css({'width':$(e).parent().width()+'px'});
-       self.df.formValidation('revalidateField','video_start_at');
+       self.fv[1].revalidateField('video_start_at');
       },
      });      
 
@@ -41,7 +41,7 @@ new IOService({
       //para evitar chamadas redundantes
         if($(this).attr('data-old-value') != $(this).val()){
           $(this).attr('data-old-value',$(this).val())
-            self.df.formValidation('revalidateField','video_start_at');
+          self.fv[1].revalidateField('video_start_at');
         }
      });
     
@@ -51,7 +51,7 @@ new IOService({
         onClose:function(){
         }
       }).pickadate('picker').on('render', function(){
-        self.df.formValidation('revalidateField', 'date');
+        self.fv[0].revalidateField('date');
     });
 
      $('#btn-get-current-time').on('click',function(){
@@ -77,8 +77,7 @@ new IOService({
         $('#date_end').pickadate().pickadate('picker').set('min',new Date(t.select));
       else
         $('#date_end').pickadate().pickadate('picker').set('min',new Date())
-        
-        self.df.formValidation('revalidateField', 'date_start');
+        self.fv[0].revalidateField('date_start');
     });
   
     $('#date_end').pickadate({
@@ -88,7 +87,7 @@ new IOService({
         $("[name='description']").focus();
       }
     }).pickadate('picker').on('render', function(){
-      self.df.formValidation('revalidateField', 'date_end');
+      self.fv[0].revalidateField('date_end');
     });
 
 
@@ -186,219 +185,290 @@ new IOService({
     }).on('draw.dt',function(){
       $('[data-toggle="tooltip"]').tooltip();
     });
-    
-   //FormValidation initialization
-    self.fv = self.df.formValidation({
-      locale: 'pt_BR',
-      excluded: 'disabled',
-      framework: 'bootstrap',  
-      icon: {
-        valid: 'fv-ico ico-check',
-        invalid: 'fv-ico ico-close',
-        validating: 'fv-ico ico-gear ico-spin'
-      },
-      fields:{
-        name:{
-          validators:{
-            notEmpty:{
-              message: 'O nome/título do popup é obrigatório!'
-            }
-          }
-        },
-        date_start:{
-          validators:{
-            notEmpty:{
-              message: 'O data inicial é obrigatória'
-            },
-            date:{
-              format: 'DD/MM/YYYY',
-              message: 'Informe uma data válida!'
-            }
-          }
-        },
-        url:{
-          enable:false,
-          validators:{
-            uri:{
-              message: 'Informe uma URL válida!'
-            }
-          }
-        },
-        date_end:{
-          validators:{
-            date:{
-              format: 'DD/MM/YYYY',
-              message: 'Informe uma data válida!'
-            }
-          }
-        },
-        has_images:{
-          enabled:false,
-          validators:{
-            callback:{
-              message: 'Carregue a imagem do popup',
-              callback: function(value, validator, $field){
-                if(self.dz.files.length>0)
-                  return true
-                return false;
+
+    let form = document.getElementById(self.dfId);
+    let fv1 = FormValidation.formValidation(
+      form.querySelector('.step-pane[data-step="1"]'),
+      {
+        fields: {
+          name:{
+            validators:{
+              notEmpty:{
+                message: 'O nome/título do popup é obrigatório!'
               }
             }
-          }
-        },
-        imageorvideo:{
-          validators:{
-            callback:{
-              message: 'O popup deve conter uma imagem ou um vídeo!',
-              callback: function(value, validator, $field){
-                
-                if(self.dz.files.length==0 && $('#video_data').val()==''){
-                  toastr["error"]("O popup deve conter uma imagem ou um vídeo!")
-                  return false;
-                }
-                return true
+          },
+          date_start:{
+            validators:{
+              notEmpty:{
+                message: 'O data inicial é obrigatória'
+              },
+              date:{
+                format: 'DD/MM/YYYY',
+                message: 'Informe uma data válida!'
               }
             }
-          }
+          },
+          url:{
+            enable:false,
+            validators:{
+              uri:{
+                message: 'Informe uma URL válida!'
+              }
+            }
+          },
+          date_end:{
+            validators:{
+              date:{
+                format: 'DD/MM/YYYY',
+                message: 'Informe uma data válida!'
+              }
+            }
+          },
+          // has_images:{
+          //   enabled:false,
+          //   validators:{
+          //     callback:{
+          //       message: 'Carregue a imagem do popup',
+          //       callback: function(value, validator, $field){
+          //         if(self.dz.files.length>0)
+          //           return true
+          //         return false;
+          //       }
+          //     }
+          //   }
+          // },
+          width:{
+            enabled:true,
+            validators:{
+              greaterThan: {
+                value: 1,
+                message: 'Alt. Mínima 1px',
+              },
+              lessThan: {
+                value: 2000,
+                message: 'Larg. Máxima 2000px',
+              }
+            }
+          },
+          height:{
+            enabled:true,
+            validators:{
+              greaterThan: {
+                value: 1,
+                message: 'Larg. Mínima 1px',
+              },
+              lessThan: {
+                value: 1000,
+                message: 'Alt. Máxima 1000px',
+              }
+            }
+          },
         },
-        video_url:{
-          validators:{
-            promise:{
-              promise: function(value, validator, $field){
-                let dfd   = new $.Deferred(), 
-                    video = getVideoInfos($('#video_url').val()),
-                    prom;
-                
-                if(video.source != null){
-                  $('#embed-container-video').addClass('loading');
-                  switch(video.source){
-                    case 'youtube':
-                      prom = getYoutubeVideoPromise(video,self);
-                      break;
-                    case 'facebook':
-                      prom = getFacebookVideoPromise(video,self);
-                      break;
+        plugins: {
+          trigger: new FormValidation.plugins.Trigger(),
+          submitButton: new FormValidation.plugins.SubmitButton(),
+          // defaultSubmit: new FormValidation.plugins.DefaultSubmit(),
+          bootstrap: new FormValidation.plugins.Bootstrap(),
+          icon: new FormValidation.plugins.Icon({
+            valid: 'fv-ico ico-check',
+            invalid: 'fv-ico ico-close',
+            validating: 'fv-ico ico-gear ico-spin'
+          }),
+        },
+    }).setLocale('pt_BR', FormValidation.locales.pt_BR);
+
+    // self.imgOrVideoFv = FormValidation.formValidation(
+    //   form,
+    //   {
+    //     fields: {
+    //       imageorvideo:{
+    //         validators:{
+    //           callback:{
+    //             message: 'O popup deve conter uma imagem ou um vídeo!',
+    //             callback: function(input){
+                  
+    //               if(self.dz.files.length==0 && $('#video_data').val()==''){
+    //                 toastr["error"]("O popup deve conter uma imagem ou um vídeo!")
+    //                 return false;
+    //               }
+    //               return true
+    //             }
+    //           }
+    //         }
+    //       },
+    //     },
+    //     plugins: {
+    //       trigger: new FormValidation.plugins.Trigger(),
+    //       submitButton: new FormValidation.plugins.SubmitButton(),
+    //       // defaultSubmit: new FormValidation.plugins.DefaultSubmit(),
+    //       bootstrap: new FormValidation.plugins.Bootstrap(),
+    //       icon: new FormValidation.plugins.Icon({
+    //         valid: 'fv-ico ico-check',
+    //         invalid: 'fv-ico ico-close',
+    //         validating: 'fv-ico ico-gear ico-spin'
+    //       }),
+    //     },
+    // }).setLocale('pt_BR', FormValidation.locales.pt_BR);
+
+    let fv2 = FormValidation.formValidation(
+      form.querySelector('.step-pane[data-step="2"]'),
+      {
+        fields: {
+          imageorvideo:{
+            validators:{
+              callback:{
+                message: 'O popup deve conter uma imagem ou um vídeo!',
+                callback: function(input){
+                  
+                  if(self.dz.files.length==0 && $('#video_data').val()==''){
+                    toastr["error"]("O popup deve conter uma imagem ou um vídeo!")
+                    return false;
                   }
-                    
-                  prom.then(resolve=>{
-                    resolve.callback(resolve);
-                    $('#video_title').val(video.infos.title);
-                    $('#video_description').val(video.infos.description);
-                    $('#video_start_at').removeAttr('disabled');
-                    $('#btn-get-current-time').removeClass('__disabled mouse-off');
-
-                    makeVideoThumbs(video,self);
-                    $('#video_data').val(JSON.stringify(video));
-                    dfd.resolve({ valid: true });
-                    
-                    if($('#video_url').attr('data-loaded')!==undefined){
-                      let vdata = JSON.parse($('#video_url').attr('data-loaded'));
-                      //what need to call twice??
-                      let vthumb = JSON.parse(JSON.parse($('#video_url').attr('data-thumb')));
-                      $('#video_title').val(vdata.title)
-                      $('#video_description').val(vdata.description)
-                      $($('.container-video-thumb .video-thumb')[vthumb.pos]).css({
-                        'backgroundImage': "url('"+vthumb.url+"')"
-                      }).trigger('click');
-
-                      $('#video_url').removeAttr('data-loaded').removeAttr('data-thumb');
+                  return true
+                }
+              }
+            }
+          },
+          video_url:{
+            validators:{
+              promise:{
+                promise: function(input){
+                  let dfd   = new $.Deferred(), 
+                      video = getVideoInfos($('#video_url').val()),
+                      prom;
+                  
+                  if(video.source != null){
+                    $('#embed-container-video').addClass('loading');
+                    switch(video.source){
+                      case 'youtube':
+                        prom = getYoutubeVideoPromise(video,self);
+                        break;
+                      case 'facebook':
+                        prom = getFacebookVideoPromise(video,self);
+                        break;
                     }
-
-                    self.df.formValidation('revalidateField','imageorvideo');
-                    return dfd.promise();
-                  }).
-                  catch(reject=>{
-                    console.log(reject);
-                    reject.callback(reject);
-                    let msg = reject.data != null ? reject.data : "Este link não corresponde a nenhum vídeo válido"
+                      
+                    prom.then(resolve=>{
+                      resolve.callback(resolve);
+                      $('#video_title').val(video.infos.title);
+                      $('#video_description').val(video.infos.description);
+                      $('#video_start_at').removeAttr('disabled');
+                      $('#btn-get-current-time').removeClass('__disabled mouse-off');
+  
+                      makeVideoThumbs(video,self);
+                      $('#video_data').val(JSON.stringify(video));
+                      dfd.resolve({ valid: true });
+                      
+                      if($('#video_url').attr('data-loaded')!==undefined){
+                        let vdata = JSON.parse($('#video_url').attr('data-loaded'));
+                        //what need to call twice??
+                        let vthumb = JSON.parse(JSON.parse($('#video_url').attr('data-thumb')));
+                        $('#video_title').val(vdata.title)
+                        $('#video_description').val(vdata.description)
+                        $($('.container-video-thumb .video-thumb')[vthumb.pos]).css({
+                          'backgroundImage': "url('"+vthumb.url+"')"
+                        }).trigger('click');
+  
+                        $('#video_url').removeAttr('data-loaded').removeAttr('data-thumb');
+                      }
+                      self.fv[1].revalidateField('imageorvideo');
+                      return dfd.promise();
+                    }).
+                    catch(reject=>{
+                      console.log(reject);
+                      reject.callback(reject);
+                      let msg = reject.data != null ? reject.data : "Este link não corresponde a nenhum vídeo válido"
+                      dfd.reject({
+                        valid:false,
+                        message: msg
+                      });
+                    });
+                  }
+                  else{
+                    videoUnload(self);
+                    if($('#video_url').val()=='')
+                      dfd.resolve({ valid: true });
+                    else
                     dfd.reject({
                       valid:false,
-                      message: msg
+                      message: "Este link não corresponde a nenhum vídeo válido"
                     });
-                  });
-                }
-                else{
-                  videoUnload(self);
-                  if($('#video_url').val()=='')
-                    dfd.resolve({ valid: true });
-                  else
-                  dfd.reject({
-                    valid:false,
-                    message: "Este link não corresponde a nenhum vídeo válido"
-                  });
-                
-                }
-                return dfd.promise();
+                  
+                  }
+                  return dfd.promise();
+                },
+                message: 'O link do vídeo informado é inválido',
               },
-              message: 'O link do vídeo informado é inválido',
-            },
-          }
-        },
-        video_start_at:{
-          validators:{
-            callback:{
-              callback:function(value, validator, $field){
-                let dur = moment.duration(value.replace(/\s/g,''));
-                let isodur = $('#video_start_at').attr('data-video-duration')
-                if(isodur !== undefined && isodur != null){
-                  if(dur.asSeconds() > moment.duration(isodur).asSeconds())
-                    return {
-                      valid:false,
-                      message:'Início máximo em '+moment.duration(isodur,"minutes").format("H:mm:ss")
-                    }
-                }
-                return true;
-             },
-            },
-          }
-        },
-        video_date:{
-          validators:{
-            date:{
-              format: 'DD/MM/YYYY',
-              message: 'Informe uma data válida!'
             }
-          }
-        },
-        'width':{
-          enabled:true,
-          validators:{
-            greaterThan: {
-              value: 1,
-              message: 'Alt. Mínima 1px',
-            },
-            lessThan: {
-              value: 2000,
-              message: 'Larg. Máxima 2000px',
+          },
+          video_start_at:{
+            validators:{
+              callback:{
+                callback:function(input){
+                  let dur = moment.duration(input.value.replace(/\s/g,''));
+                  let isodur = $('#video_start_at').attr('data-video-duration')
+                  if(isodur !== undefined && isodur != null){
+                    if(dur.asSeconds() > moment.duration(isodur).asSeconds())
+                      return {
+                        valid:false,
+                        message:'Início máximo em '+moment.duration(isodur,"minutes").format("H:mm:ss")
+                      }
+                  }
+                  return true;
+               },
+              },
             }
-          }
-        },
-        'height':{
-          enabled:true,
-          validators:{
-            greaterThan: {
-              value: 1,
-              message: 'Larg. Mínima 1px',
-            },
-            lessThan: {
-              value: 1000,
-              message: 'Alt. Máxima 1000px',
+          },
+          video_date:{
+            validators:{
+              date:{
+                format: 'DD/MM/YYYY',
+                message: 'Informe uma data válida!'
+              }
             }
-          }
+          },
         },
-      }
-    })
-    .on('err.field.fv', function(e, data) {
-      if(self.fv.caller=='wizard'){
-        //self.df.formValidation('enableFieldValidators','width',false);
-        //self.df.formValidation('enableFieldValidators','height',false);
-      }
-    })
-    .on('err.validator.fv', function(e, data) {
-      data.element
-          .data('fv.messages')
-          .find('.help-block[data-fv-for="' + data.field + '"]').hide()
-          .filter('[data-fv-validator="' + data.validator + '"]').show();
-    });
+        plugins: {
+          trigger: new FormValidation.plugins.Trigger(),
+          submitButton: new FormValidation.plugins.SubmitButton(),
+          // defaultSubmit: new FormValidation.plugins.DefaultSubmit(),
+          bootstrap: new FormValidation.plugins.Bootstrap(),
+          icon: new FormValidation.plugins.Icon({
+            valid: 'fv-ico ico-check',
+            invalid: 'fv-ico ico-close',
+            validating: 'fv-ico ico-gear ico-spin'
+          }),
+        },
+    }).setLocale('pt_BR', FormValidation.locales.pt_BR);
+
+    self.fv = [fv1, fv2];
+    
+  //  //FormValidation initialization
+  //   self.fv = self.df.formValidation({
+  //     locale: 'pt_BR',
+  //     excluded: 'disabled',
+  //     framework: 'bootstrap',  
+  //     icon: {
+  //       valid: 'fv-ico ico-check',
+  //       invalid: 'fv-ico ico-close',
+  //       validating: 'fv-ico ico-gear ico-spin'
+  //     },
+  //     fields:{
+  //     }
+  //   })
+  //   .on('err.field.fv', function(e, data) {
+  //     if(self.fv.caller=='wizard'){
+  //       //self.df.formValidation('enableFieldValidators','width',false);
+  //       //self.df.formValidation('enableFieldValidators','height',false);
+  //     }
+  //   })
+  //   .on('err.validator.fv', function(e, data) {
+  //     data.element
+  //         .data('fv.messages')
+  //         .find('.help-block[data-fv-for="' + data.field + '"]').hide()
+  //         .filter('[data-fv-validator="' + data.validator + '"]').show();
+  //   });
 
     //Dropzone initialization
     Dropzone.autoDiscover = false;
@@ -413,10 +483,10 @@ new IOService({
          }
       },
       removedFile:function(file){
-        self.df.formValidation('updateStatus','has_images', 'NOT_VALIDATED')
+        self.fv[0].updateFieldStatus('has_images', 'NotValidated');
       },
       onSuccess:function(file,ret){
-       self.df.formValidation('revalidateField','imageorvideo');
+        self.fv[1].revalidateField('imageorvideo');
         //self.df.formValidation('revalidateField','imageorvideo');
         //self.df.formValidation('revalidateField', 'has_images');
       }
@@ -555,16 +625,13 @@ new IOService({
 
     //need to transform wizardActions in a method of Class
     self.wizardActions(function(){
-       
-      self.df.formValidation('revalidateField','imageorvideo');
+      // self.imgOrVideoFv.revalidateField('imageorvideo');
 
-      console.log(self.wz.keys.fv.$form.serializeArray());
       //criar função para calcular o aspectratio
       //let img_dim = getDimension(self);
       //self.dz.copy_params.sizes = img_dim;
       //self.dz.options.thumbnailHeight = img_dim.thumb.h;
       //self.dz.options.thumbnailWidth = img_dim.thumb.w;
-
 
       $("[name='__dz_images']").val(JSON.stringify(self.dz.getOrderedDataImages()));
       $("[name='__dz_copy_params']").val(JSON.stringify(self.dz.copy_params));
@@ -752,8 +819,7 @@ function getFacebookVideoPromise(video,self){
 }
 
 function videoUnload(self){
-
-  self.df.formValidation('revalidateField','imageorvideo');
+  self.fv[1].revalidateField('imageorvideo');
 
   $('#embed-container-video').removeClass('loading');
   $('.vplayer').attr('src','').addClass('d-none');
@@ -841,7 +907,7 @@ function view(self){
           if(data.video_id != null){
             $('#video_url').attr('data-loaded',JSON.stringify(data.video)).val(data.video.url);
             $('#video_url').attr('data-thumb',JSON.stringify(data.video.thumbnail));
-            self.df.formValidation('revalidateField', 'video_url');
+            self.fv[1].revalidateField('video_url');
 
             if(data.video.date!=null)
               $("#video_date").pickadate('picker').set('select',new Date(data.video.date));
