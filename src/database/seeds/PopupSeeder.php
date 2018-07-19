@@ -20,11 +20,11 @@ class PopupSeeder extends Seeder
           ]);
       }
       //seta privilegios padrão para o user admin
-      $user = Sentinel::findById(1);
-      $user->addPermission('popup.view');
-      $user->addPermission('popup.create');
-      $user->addPermission('popup.update');
-      $user->addPermission('popup.delete');
-      $user->save();
+      $adminRole = Sentinel::findRoleBySlug('admin');
+      $adminRole->addPermission('news.view');
+      $adminRole->addPermission('news.create');
+      $adminRole->addPermission('news.update');
+      $adminRole->addPermission('news.delete');
+      $adminRole->save();
     }
 } 
