@@ -470,10 +470,11 @@ new IOService({
          }
       },
       crop:{
-        aspect_ratio_x = 2,
-        aspect_ratio_y = 1
-      },
+        aspect_ratio_x:2,
+        aspect_ratio_y:1
+      }, 
       removedFile:function(file){
+        //S
         // self.fv[0].updateFieldStatus('has_images', 'NotValidated');
       },
       onSuccess:function(file,ret){
