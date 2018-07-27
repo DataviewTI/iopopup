@@ -1,39 +1,49 @@
-
-# Galeria de fotos para IntranetOne
-Galeria de fotos...
-IOGallery requires IntranetOne
+# Controle de Popu'ups
+Controle de Popup's com definição automatica ou não de dimensões, período de exibição, delay de abertura e fechamento, redirecionamento e uso de videos do youtube ou facebook.
 ## Conteúdo
  
 ## Instalação
 
 ```sh
-composer require dataview/iogallery
+composer require dataview/iopopup
 ```
-Instalar o IntranetOne com php artisan
 ```sh
-php artisan intranetone-gallery:install
-```
-
-## Assets
-  
-- Instale o pacote de assets da do serviço IOGallery via NPM
-
-```sh
-npm install assets-io-gallery --save
+php artisan io-popup:install
 ```
 
 - Configure o webpack conforme abaixo 
 ```js
-let io = require('intranetone');
-let gallery = require('intranetone-gallery');
+...
+let slide = require('io-popup');
 io.compile({
   services:{
-    'gallery': new gallery()
+    ...
+    new popup()
+    ...
   }
 });
+
 ```
 - Compile os assets e faça o cache
 ```sh
 npm run dev|prod|watch
 php artisan config:cache
+```
+## Frontend 
+
+- Adicione a chamada da classe ao seu arquivo .blade
+
+```php
+@php
+  use Dataview\IOPopup\Popup
+@endphp
+```
+
+- Insira o componente abaixo informando o ID do popup cadastrado, se "popup" não for informado, o ID mais recente será chamado.
+
+```php
+@component('Popup::fe.popup',[
+  "popup"=> Popup::find(1)
+])
+@endcomponent
 ```
