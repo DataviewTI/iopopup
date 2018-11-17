@@ -1,4 +1,4 @@
-# Controle de Popu'ups
+# Controle de Popup's
 Controle de Popup's com definição automatica ou não de dimensões, período de exibição, delay de abertura e fechamento, redirecionamento e uso de videos do youtube ou facebook.
 ## Conteúdo
  
@@ -14,13 +14,13 @@ php artisan io-popup:install
 - Configure o webpack conforme abaixo 
 ```js
 ...
-let slide = require('io-popup');
+let popup = require('io-popup');
 io.compile({
-  services:{
+  services:[
     ...
-    new popup()
+    new popup(),
     ...
-  }
+  ]
 });
 
 ```
