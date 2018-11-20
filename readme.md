@@ -14,7 +14,7 @@ php artisan io-popup:install
 - Configure o webpack conforme abaixo 
 ```js
 ...
-let popup = require('io-popup');
+let popup = require('intranetone-popup');
 io.compile({
   services:[
     ...
