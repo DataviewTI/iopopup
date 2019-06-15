@@ -33,6 +33,7 @@ function IOPopup(params={}){
       IO.dep.io.toastr + 'toastr.min.css',
       IO.src.io.css + 'toastr.css',
       IO.src.io.root + 'forms/video-form.css',
+      $.dep.cropper + 'cropper.css',
       $.dep.popup + 'popup.css',
     ], IO.dest.io.root + 'services/io-popup.min.css');
     
