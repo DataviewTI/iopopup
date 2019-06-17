@@ -38,7 +38,8 @@
     <div id="{{$id}}" class="modal fade __pp" data-keyboard = "{{$esc}}" data-show='true' tabindex="-1" 
     role="dialog" ia-labelledby="PopupModalTitle" aria-hidden="true">
       <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-        <span aria-hidden="true" class = 'ico ico-close' title = 'fechar'></span>
+        {{-- <span aria-hidden="true" class = 'ico ico-close' title = 'fechar'></span> --}}
+        <i class="fas fa-times"></i>
       </button>
       <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
         <div class="modal-content">
