@@ -39,7 +39,7 @@
     role="dialog" ia-labelledby="PopupModalTitle" aria-hidden="true">
       <button type="button" class="close" data-dismiss="modal" aria-label="Close">
         {{-- <span aria-hidden="true" class = 'ico ico-close' title = 'fechar'></span> --}}
-        <i class="fas fa-times"></i>
+        <i class="fas fa-times" style="color: #fff; text-shadow: none"></i>
       </button>
       <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
         <div class="modal-content">
