@@ -13,6 +13,7 @@ class PopupSeeder extends Seeder
       if(!Service::where('service','Popup')->exists()){
         Service::insert([
             'service' => "Popup",
+            'trans' =>"Popup's",
             'alias' =>'popup',
             'ico' => 'ico-image',
             'description' => "Controle de Popup's",
