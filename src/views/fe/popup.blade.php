@@ -32,7 +32,7 @@
         $w = isset($video->w) ? $video->w : filled($pp->width) ? $pp->width : '640';
         $h = isset($video->h) ? $video->h : filled($pp->height) ? $pp->height : '480';
       }
-      $id = str_random(6);
+      $id = Str::random(6);
     @endphp
 
     <div id="{{$id}}" class="modal fade __pp" data-keyboard = "{{$esc}}" data-show='true' tabindex="-1" 
