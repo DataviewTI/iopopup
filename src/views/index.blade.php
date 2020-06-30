@@ -4,7 +4,6 @@
 @section('header_styles')
   <link rel="stylesheet" type="text/css" href="{{ asset('css/pickadate-full.min.css') }}">
   <link rel="stylesheet" type="text/css" href="{{ asset('io/services/io-popup.min.css') }}">
-</style>
 @stop
 
 @section('main-heading')
@@ -26,14 +25,6 @@
 						"tab"=>"Cadastrar",
 						"icon"=>"ico ico-new",
 						"view"=>"Popup::form"
-					],
-					[
-						"tab"=>"Categorias",
-						"icon"=>"ico ico-structure-2",
-						"view"=>"IntranetOne::io.layout.categories-crud",
-						"params"=>[
-							"cat"=>"Gallery"
-						]
 					],
 				]
 			])

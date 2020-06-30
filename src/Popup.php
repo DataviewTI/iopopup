@@ -22,10 +22,11 @@ class Popup extends IOModel
     parent::boot(); 
 
     static::created(function (Popup $obj) {
-      if($obj->getAppend("has_images")){
+      if($obj->getAppend("hasImages")){
         $group = new Group([
           'group' => "Album do Popup ".$obj->id,
-          'sizes' => $obj->getAppend("sizes")
+          'sizes' => $obj->getAppend("sizes"),
+          'service_id' => Service::where('alias','popup')->value('id')
         ]);
         $group->save();
         $obj->group()->associate($group)->save();
