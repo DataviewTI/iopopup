@@ -24,7 +24,7 @@ new IOService({
           $(this).addClass('active');
       });
     });
-    
+
     $('#video_start_at').wickedpicker({
       now: "00:00:00",
       clearable: false,
@@ -35,7 +35,7 @@ new IOService({
        $(t).css({'width':$(e).parent().width()+'px'});
        self.fv[1].revalidateField('video_start_at');
       },
-     });      
+     });
 
      $('#video_start_at').on('change',function(){
       //para evitar chamadas redundantes
@@ -44,7 +44,7 @@ new IOService({
           self.fv[1].revalidateField('video_start_at');
         }
      });
-    
+
     //pickadate objects initialization
     $('#video_date').pickadate({
         formatSubmit: 'yyyy-mm-dd 00:00:00',
@@ -79,7 +79,7 @@ new IOService({
         $('#date_end').pickadate().pickadate('picker').set('min',new Date())
         self.fv[0].revalidateField('date_start');
     });
-  
+
     $('#date_end').pickadate({
       formatSubmit: 'yyyy-mm-dd 00:00:00',
       min: new Date(),
@@ -92,7 +92,7 @@ new IOService({
 
 
     //Datatables initialization
-    
+
     self.dt = $('#default-table').DataTable({
       aaSorting:[ [0,"desc" ]],
       ajax: self.path+'/list',
@@ -100,7 +100,7 @@ new IOService({
         //parent call
         let api = this.api();
         $.fn.dataTable.defaults.initComplete(this);
-  
+
         //pickadate objects initialization
         $('#ft_dtini').pickadate({
         }).pickadate('picker').on('set', function(t){
@@ -166,13 +166,13 @@ new IOService({
           render:function(data,type,row,y){
             return self.dt.addDTButtons({
               buttons:[
-                {ico:'ico-eye',_class:'text-primary',title:'preview'},
+                // {ico:'ico-eye',_class:'text-primary',title:'preview'},
                 {ico:'ico-edit',_class:'text-info',title:'editar'},
                 {ico:'ico-trash',_class:'text-danger',title:'excluir'},
             ]});
           }
         }
-      ]	
+      ]
     }).on('click',".btn-dt-button[data-original-title=editar]",function(){
       var data = self.dt.row($(this).parents('tr')).data();
       self.view(data.id);
@@ -274,7 +274,7 @@ new IOService({
     //           callback:{
     //             message: 'O popup deve conter uma imagem ou um vídeo!',
     //             callback: function(input){
-                  
+
     //               if(self.dz.files.length==0 && $('#video_data').val()==''){
     //                 toastr["error"]("O popup deve conter uma imagem ou um vídeo!")
     //                 return false;
@@ -307,7 +307,7 @@ new IOService({
               callback:{
                 message: 'O popup deve conter uma imagem ou um vídeo!',
                 callback: function(input){
-                  
+
                   if(self.dz.files.length==0 && $('#video_data').val()==''){
                     toastr["error"]("O popup deve conter uma imagem ou um vídeo!")
                     return false;
@@ -321,10 +321,10 @@ new IOService({
             validators:{
               promise:{
                 promise: function(input){
-                  let dfd   = new $.Deferred(), 
+                  let dfd   = new $.Deferred(),
                       video = getVideoInfos($('#video_url').val()),
                       prom;
-                  
+
                   if(video.source != null){
                     $('#embed-container-video').addClass('loading');
                     switch(video.source){
@@ -335,18 +335,18 @@ new IOService({
                         prom = getFacebookVideoPromise(video,self);
                         break;
                     }
-                      
+
                     prom.then(resolve=>{
                       resolve.callback(resolve);
                       $('#video_title').val(video.infos.title);
                       $('#video_description').val(video.infos.description);
                       $('#video_start_at').removeAttr('disabled');
                       $('#btn-get-current-time').removeClass('__disabled mouse-off');
-  
+
                       makeVideoThumbs(video,self);
                       $('#video_data').val(JSON.stringify(video));
                       dfd.resolve({ valid: true });
-                      
+
                       if($('#video_url').attr('data-loaded')!==undefined){
                         let vdata = JSON.parse($('#video_url').attr('data-loaded'));
                         //what need to call twice??
@@ -356,7 +356,7 @@ new IOService({
                         $($('.container-video-thumb .video-thumb')[vthumb.pos]).css({
                           'backgroundImage': "url('"+vthumb.url+"')"
                         }).trigger('click');
-  
+
                         $('#video_url').removeAttr('data-loaded').removeAttr('data-thumb');
                       }
                       self.fv[1].revalidateField('imageorvideo');
@@ -381,7 +381,7 @@ new IOService({
                       valid:false,
                       message: "Este link não corresponde a nenhum vídeo válido"
                     });
-                  
+
                   }
                   return dfd.promise();
                 },
@@ -430,12 +430,12 @@ new IOService({
     }).setLocale('pt_BR', FormValidation.locales.pt_BR);
 
     self.fv = [fv1, fv2];
-    
+
   //  //FormValidation initialization
   //   self.fv = self.df.formValidation({
   //     locale: 'pt_BR',
   //     excluded: 'disabled',
-  //     framework: 'bootstrap',  
+  //     framework: 'bootstrap',
   //     icon: {
   //       valid: 'fv-ico ico-check',
   //       invalid: 'fv-ico ico-close',
@@ -472,7 +472,7 @@ new IOService({
       crop:{
         aspect_ratio_x:2,
         aspect_ratio_y:1
-      }, 
+      },
       removedFile:function(file){
         //S
         // self.fv[0].updateFieldStatus('has_images', 'NotValidated');
@@ -516,7 +516,7 @@ new IOService({
 
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-                                                                                                            
+
   ██╗      ██████╗  ██████╗ █████╗ ██╗         ███╗   ███╗███████╗████████╗██╗  ██╗ ██████╗ ██████╗ ███████╗
   ██║     ██╔═══██╗██╔════╝██╔══██╗██║         ████╗ ████║██╔════╝╚══██╔══╝██║  ██║██╔═══██╗██╔══██╗██╔════╝
   ██║     ██║   ██║██║     ███████║██║         ██╔████╔██║█████╗     ██║   ███████║██║   ██║██║  ██║███████╗
@@ -543,7 +543,7 @@ function makeVideoThumbs(video,self){
           if($(this).hasClass('active')){
             let bg = $(this).css('backgroundImage');
             $('#video_thumbnail').val(JSON.stringify({
-              pos:$(this).attr('data-pos'),  
+              pos:$(this).attr('data-pos'),
               url:bg.substring(5,bg.lastIndexOf("\""))
             }));
           }
@@ -565,7 +565,7 @@ function makeVideoThumbs(video,self){
         if($(this).hasClass('active')){
           let bg = $(this).css('backgroundImage');
           $('#video_thumbnail').val(JSON.stringify({
-            pos:$(this).attr('data-pos'),  
+            pos:$(this).attr('data-pos'),
             url:bg.substring(5,bg.lastIndexOf("\""))
           }));
          }
@@ -583,7 +583,7 @@ function getYoutubeVideoPromise(video,self){
   let _resolve = function(res){
     let player = $('#'+video.source+'-player');
     player.removeClass('d-none').attr('src',video.embed);
-    
+
     let _ytp = new YT.Player('youtube-player',{
       events: {
         'onReady': function(_t){
@@ -649,7 +649,7 @@ function getFacebookVideoPromise(video,self){
       description:res.data.description,
       duration:moment.duration(parseInt(res.data.length),'seconds').format('hh:mm:ss'),
     }
-    
+
     video.embed = video.embed+'&width='+res.data.format[0].width
     let max_video_number = (res.data.thumbnails.data.length>=3) ? 3 : res.data.thumbnails.data.length;
     for(let i=0;i<max_video_number;i++)
@@ -713,7 +713,7 @@ function getVideoInfos(url){
         '?enablejsapi=1',
         '&origin='+document.location.origin
       ].join(''),
-      thumbs:[]        
+      thumbs:[]
   }
 
   if(rgx_facebook.test(url)){
@@ -727,7 +727,7 @@ function getVideoInfos(url){
           '?href=https%3A%2F%2Fwww.facebook.com%2F',
           url_match[1]+'%2Fvideos%2F'+url_match[2]
         ].join(''),
-        thumbs:[]        
+        thumbs:[]
       }
   }
 
@@ -758,7 +758,7 @@ function view(self){
 
         $("#close_on_esc").aaToggle(!data.close_on_esc==0);
 
-        //reload imagens 
+        //reload imagens
           self.dz.removeAllFiles(true);
 
           if(data.group!=null){
@@ -772,7 +772,7 @@ function view(self){
 
             if(data.video.date!=null)
               $("#video_date").pickadate('picker').set('select',new Date(data.video.date));
-            
+
               let dur = moment.duration(data.video.start_at,'seconds');
               $('#video_start_at').val(dur.format('hh : mm : ss',{trim:false}));
               $('#video_start_at').data('plugin_wickedpicker').setTime({
